@@ -7,8 +7,8 @@ import cv2
 from PIL import Image # Pillow - Image Processing Library Python Imaging Library
 
 # Change the directory as per own folder path where the images are located
-os.chdir('/Users/renuka/pics')
-path = "/Users/renuka/pics"
+os.chdir('/Users/renuka/JetLearn/Open CV/Lesson 6 - Image Collage Video/pics')
+path = "/Users/renuka/JetLearn/Open CV/Lesson 6 - Image Collage Video/pics"
 
 mean_height = 0
 mean_width = 0
@@ -46,44 +46,32 @@ for file in os.listdir('.'):
         
 
 def videoGenerator():
-    video_name = "RenukaVideo.mp4"  # Ensure this is correct
+    video_name = "MyFirstVideo.mp4"
 
-    os.chdir('/Users/renuka/pics')
-    print(f"Current working directory: {os.getcwd()}")
+    os.chdir('/Users/renuka/JetLearn/Open CV/Lesson 6 - Image Collage Video/pics')
 
-
-    images = [img for img in os.listdir('.') if img.endswith(('.jpg', '.jpeg', '.png'))]
-
-    if len(images) == 0:
-        raise Exception("No image files found to create a video!")
-
-    print("Image files to be used in video:", images)
-
-    # Read the first image to get dimensions
+    images = []
+    for img in os.listdir('.'):
+        if img.endswith('.jpg') or img.endswith('.jpeg') or img.endswith('.png'):
+            images.append(img)
+    
+    # Array images should only consider the image files ignoring others if any
+    print(images)
+    
     frame = cv2.imread(os.path.join(".", images[0]))
-
-    # Check if the frame is valid
-    if frame is None:
-        raise Exception(f"Could not read the image file: {images[0]}")
-
+     # setting the frame width, height width the width, height of first image
     height, width, layers = frame.shape
+    # video = cv2.VideoWriter(video_name, 0, 1, (width, height))
 
-    # Use a valid codec (XVID or MJPG) and ensure proper file extension
     # video = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc(*'XVID'), 1, (width, height))
     video = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc(*'mp4v'), 1, (width, height))
 
 
     # Appending the images to the video one by one
     for image in images:
-        img_frame = cv2.imread(os.path.join(".", image))
-        if img_frame is None:
-            print(f"Warning: Could not read {image}, skipping this image.")
-            continue
-        video.write(img_frame)
+        video.write(cv2.imread(os.path.join(".", image)))
 
-    video.release()
     cv2.destroyAllWindows()
-    print(f"Video {video_name} created successfully.")
-
+    video.release()
 
 videoGenerator()
